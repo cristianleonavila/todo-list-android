@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         editTextTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Obtengo el valor anterior de la tarea.
                 valorAnterior = editTextTask.getText().toString().trim();
             }
         });
