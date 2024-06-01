@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> arrayAdapter;
     private List<String> tasksList;
     private TodoListDbHelper db;
+    private String valorAnterior = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +31,23 @@ public class MainActivity extends AppCompatActivity {
         listViewTasks = findViewById(R.id.listViewTasks);
         db = new TodoListDbHelper(this);
 
-        loadTasks();
+        cargarTareas();
+
+        editTextTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                valorAnterior = editTextTask.getText().toString().trim();
+            }
+        });
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String task = editTextTask.getText().toString().trim();
                 if (!task.isEmpty()) {
-                    db.addTask(task);
+                    db.registrarTarea(task);
                     editTextTask.setText("");
-                    loadTasks();
+                    cargarTareas();
                 }
             }
         });
@@ -54,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String task = editTextTask.getText().toString().trim();
                 if (!task.isEmpty()) {
-                    db.updateTask(task, task); // position + 1 because SQLite IDs start from 1
+                    db.actualizarTarea(valorAnterior, task); // position + 1 because SQLite IDs start from 1
                     editTextTask.setText("");
-                    loadTasks();
+                    cargarTareas();
                 }
             }
         });
@@ -66,16 +74,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String task = editTextTask.getText().toString().trim();
                 if (!task.isEmpty()) {
-                    db.deleteTask(task); // position + 1 because SQLite IDs start from 1
+                    db.eliminarTarea(task); // position + 1 because SQLite IDs start from 1
                     editTextTask.setText("");
-                    loadTasks();
+                    cargarTareas();
                 }
             }
         });
     }
 
-    private void loadTasks() {
-        tasksList = db.getAllTasks();
+    private void cargarTareas() {
+        tasksList = db.listarTareas();
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasksList);
         listViewTasks.setAdapter(arrayAdapter);
     }

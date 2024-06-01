@@ -32,7 +32,7 @@ public class TodoListDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addTask(String task) {
+    public void registrarTarea(String task) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_TASK, task);
@@ -40,7 +40,7 @@ public class TodoListDbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<String> getAllTasks() {
+    public List<String> listarTareas() {
         List<String> tasksList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_TODO;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -54,15 +54,15 @@ public class TodoListDbHelper extends SQLiteOpenHelper {
         return tasksList;
     }
 
-    public void updateTask(String task, String newTask) {
+    public void actualizarTarea(String oldTask, String newTask) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_TASK, newTask);
-        db.update(TABLE_TODO, values, KEY_TASK + " = ?", new String[]{String.valueOf(task)});
+        db.update(TABLE_TODO, values, KEY_TASK + " = ?", new String[]{String.valueOf(oldTask)});
         db.close();
     }
 
-    public void deleteTask(String task) {
+    public void eliminarTarea(String task) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TODO, KEY_TASK + " = ?", new String[]{String.valueOf(task)});
         db.close();
